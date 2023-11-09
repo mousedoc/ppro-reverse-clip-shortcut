@@ -1,28 +1,34 @@
-activeSequence = app.project.activeSequence;
-videoTracks = activeSequence.videoTracks;
-audioTracks = activeSequence.audioTracks;
-
-numVideoTrackLog = "Number of Video Tracks: " + videoTracks.numTracks;
-$.write(numVideoTrackLog);
-
-numAudioTrackLog = "Number of Audio Tracks: " + audioTracks.numTracks;
-$.write(numAudioTrackLog);
-
-var a = GetAllSelectedTrackItems();
+var a = GetAllActiveSequenceItems();
 $.write(a.length);
 
-function GetAllSelectedTrackItems() {
-    items = [];
+function GetAllActiveSequenceItems() {
+    var items = [];    
+    activeSequence = app.project.activeSequence;
 
+    if(activeSequence == "")
+        return items;
+
+    var videoTracks = activeSequence.videoTracks;
     if (videoTracks != "") {
-        for (var track in videoTracks) {
-            items.push(GetAllSelectedTrackItems(track));
+        var num = videoTracks.numTracks;
+        for (var i = 0; i < num; i++) {
+            var temp = GetAllSelectedTrackItems(videoTracks[i]);
+            if(temp.length <= 0)
+                continue;
+
+            items.push(temp);
         }
     }
 
+    var audioTracks = activeSequence.audioTracks;
     if (audioTracks != "") {
-        for (var track in audioTracks) {
-            items.push(GetAllSelectedTrackItems(track));
+        var num = audioTracks.numTracks;
+        for (var i = 0; i < num; i++) {
+            var temp = GetAllSelectedTrackItems(audioTracks[i]);
+            if(temp.length <= 0)
+                continue;
+
+            items.push(temp);
         }
     }
 
@@ -30,13 +36,17 @@ function GetAllSelectedTrackItems() {
 }
 
 function GetAllSelectedTrackItems(track) {
-    items = [];
+    var items = [];
 
     if (track == "")
         return items;
 
     var clips = track.clips;
-    for (var clip in clips) {
+    var num = clips.numItems;
+
+    for(var i = 0; i < num; i++)
+    {   
+        var clip = clips[i];
         if (clip.isSelected()) {
             items.push(clip);
         }
