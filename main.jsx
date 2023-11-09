@@ -1,3 +1,9 @@
-videoTracks = app.project.activeSequence.videoTracks
+activeSequence = app.project.activeSequence;
+videoTracks = activeSequence.videoTracks;
+audioTracks = activeSequence.audioTracks;
 
-$.write(videoTracks.numTracks);
+numVideoTrackLog = "Number of Video Tracks: " + videoTracks.numTracks;
+$.write(numVideoTrackLog);
+
+numAudioTrackLog = "Number of Audio Tracks: " + audioTracks.numTracks;
+$.write(numAudioTrackLog);
