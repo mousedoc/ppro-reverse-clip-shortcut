@@ -1,11 +1,25 @@
-var a = GetAllActiveSequenceItems();
-$.write(a.length);
+var selectedItems = GetAllActiveSequenceItems();
+var length = selectedItems.length;
+for (var i = 0; i < length; i++) {
+    var trackItem = selectedItems[i];
+    ReverseTrackItem(trackItem);
+}
+
+
+function ReverseTrackItem(trackItem) {
+    var orgStart = trackItem.start; // if 10
+    var orgEnd = trackItem.end;     // if 20
+
+    // Reverse ?                    // result is
+    trackItem.start = orgEnd;       // 20
+    trackItem.end = orgStart;       // 20
+}
 
 function GetAllActiveSequenceItems() {
-    var items = [];    
+    var items = [];
     activeSequence = app.project.activeSequence;
 
-    if(activeSequence == "")
+    if (activeSequence == "")
         return items;
 
     var videoTracks = activeSequence.videoTracks;
@@ -13,10 +27,10 @@ function GetAllActiveSequenceItems() {
         var num = videoTracks.numTracks;
         for (var i = 0; i < num; i++) {
             var temp = GetAllSelectedTrackItems(videoTracks[i]);
-            if(temp.length <= 0)
+            if (temp.length <= 0)
                 continue;
 
-            items.push(temp);
+            items = items.concat(temp);
         }
     }
 
@@ -25,10 +39,10 @@ function GetAllActiveSequenceItems() {
         var num = audioTracks.numTracks;
         for (var i = 0; i < num; i++) {
             var temp = GetAllSelectedTrackItems(audioTracks[i]);
-            if(temp.length <= 0)
+            if (temp.length <= 0)
                 continue;
 
-            items.push(temp);
+            items = items.concat(temp);
         }
     }
 
@@ -44,8 +58,7 @@ function GetAllSelectedTrackItems(track) {
     var clips = track.clips;
     var num = clips.numItems;
 
-    for(var i = 0; i < num; i++)
-    {   
+    for (var i = 0; i < num; i++) {
         var clip = clips[i];
         if (clip.isSelected()) {
             items.push(clip);
